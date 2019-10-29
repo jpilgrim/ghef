@@ -1,9 +1,16 @@
 {
   "name": "ghef",
   "description": "Proxy for github events, only passing push and opened pull-requests to real client",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "index.js",
   "author": "Jens von Pilgrim",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jpilgrim/ghef.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jpilgrim/ghef/issues"
+  },
   "license": "EPL-2.0",
   "dependencies": {
   		"express": "*",
@@ -12,5 +19,5 @@
   },
   "bin": {
     "ghef": "./index.js"
-  },
+  }
 }

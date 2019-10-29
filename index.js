@@ -58,4 +58,7 @@ app.use('/', proxy(outServer+":"+outPort,
 	  }
 	}
 ));
+app.use('/', function(req, res, next) { // send ok when event is ignored, otherwise log is floated with errros by smee client
+	res.send('OK');	
+})
 app.listen(inPort, () => console.log(`GitHub Event Filter listening on port ${inPort}, forwarding to ${outServer}:${outPort}!`))

@@ -1,3 +1,8 @@
+/*
+ * This is only a test script to emulate a server in order to test whether the proxy is delegating
+ * correctly.
+ */
+
 // cf. express-http-proxy
 
 
@@ -6,31 +11,36 @@ const http = require('http')
 const port = 8080
 
 const requestHandler = (request, response) => {
-  console.log("URL: " + request.url)
-  console.log("Event: " + request.headers["x-github-event"]);
-  //console.log(request)	
-  let body = '';
-    request.on('data', (chunk) => {
-        body += chunk;
-    });
-    request.on('end', () => {
-        // console.log(body);
-        
-        let pl = JSON.parse(body);
+  try {
+    console.log("URL: " + request.url)
+    console.log("Event: " + request.headers["x-github-event"]);
+    //console.log(request)	
+    let body = '';
+      request.on('data', (chunk) => {
+          body += chunk;
+      });
+      request.on('end', () => {
+          try {
+            // console.log(body);
+            
+            let pl = JSON.parse(body);
 
-        // event pull_request:
-        console.log("Action: " + pl.action); // openend or closed
-
-
-
-        // console.log("Branch: " + pl.ref)
+            // event pull_request:
+            console.log("Action: " + pl.action); // openend or closed
 
 
 
+            // console.log("Branch: " + pl.ref)
 
-        response.write('OK'); 
-        response.end(); 
-    });
+            } catch (ex) {
+              // ignore
+            }
+            response.write('OK'); 
+            response.end(); 
+      });
+    } catch (ex) {
+      console.log("Error processing request: " + ex)
+    }
   // response.end('Hello Node.js Server!')
 }
 
