@@ -3,6 +3,7 @@
 const proxy = require('express-http-proxy');
 const express = require('express');
 const yargs = require("yargs");
+var pjson = require('./package.json');
 
 const argv = yargs
   .scriptName("GitHub event filter, only fowards pushes and opened pull-requests.")
@@ -11,7 +12,6 @@ const argv = yargs
   .default('outServer', 'localhost')
   .default('outPort', 8080)
   .help()
-  .hide("version")
   .argv
 
 const inPort = argv.inPort
@@ -31,7 +31,7 @@ app.use('/', proxy(outServer+":"+outPort,
 			const action = body ? body.action : null;
 			const number = body ? body.number : null;
 			
-			let accept = event==' push'
+			let accept = event== 'push'
 				|| (event == 'pull_request' && action == 'opened');
 
 			console.log((accept?'Forwarding':
@@ -61,4 +61,4 @@ app.use('/', proxy(outServer+":"+outPort,
 app.use('/', function(req, res, next) { // send ok when event is ignored, otherwise log is floated with errros by smee client
 	res.send('OK');	
 })
-app.listen(inPort, () => console.log(`GitHub Event Filter listening on port ${inPort}, forwarding to ${outServer}:${outPort}!`))
+app.listen(inPort, () => console.log(`GitHub Event Filter ${pjson.version} listening on port ${inPort}, forwarding to ${outServer}:${outPort}!`))
