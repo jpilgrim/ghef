@@ -1,7 +1,7 @@
 {
   "name": "ghef",
   "description": "Proxy for github events, only passing push and opened pull-requests to real client",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "index.js",
   "author": "Jens von Pilgrim",
   "repository": {
@@ -13,9 +13,9 @@
   },
   "license": "EPL-2.0",
   "dependencies": {
-  		"express": "*",
-  	  	"express-http-proxy": "*",
-  	  	"yargs": "*"
+    "express": "*",
+    "express-http-proxy": "*",
+    "yargs": "*"
   },
   "bin": {
     "ghef": "./index.js"
