@@ -1,7 +1,7 @@
 {
   "name": "ghef",
   "description": "Proxy for github events, only passing push and opened pull-requests to real client",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "main": "index.js",
   "author": "Jens von Pilgrim",
   "repository": {

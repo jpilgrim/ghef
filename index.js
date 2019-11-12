@@ -50,7 +50,11 @@ app.use('/', proxy(outServer+":"+outPort,
 			const number = body ? body.number : null;
 			
 			let accept = event== 'push'
-				|| (event == 'pull_request' && (action == 'opened' || action=='synchronize'));
+				|| (event == 'pull_request' && action == 'opened');
+
+			if (!accept && syncPR) {		
+				accept = event == 'pull_request' && action == 'synchronize';
+			}
 
 			console.log((accept?'Forwarding':
 				                '  Ignoring')
