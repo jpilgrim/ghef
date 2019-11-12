@@ -7,16 +7,34 @@ var pjson = require('./package.json');
 
 const argv = yargs
   .scriptName("GitHub event filter, only fowards pushes and opened pull-requests.")
-  .usage('$0 [args]')
-  .default('inPort', 3000)
-  .default('outServer', 'localhost')
-  .default('outPort', 8080)
-  .help()
-  .argv
+  .usage('$0')
+  .option('inPort',  {
+  		default: 3000, 
+  		describe: 'Port to which github/smee.io sends events.',
+  		type: 'number'
+	})
+  .option('outServer', {
+  		default: 'localhost',
+  		describe: 'Host on which Jenkins runs.',
+  		type: 'string'
+  	})
+  .option('outPort', {
+  		default: 8080,
+  		describe: 'Port on which Jenkins is listening.',
+  		type: 'number'
+  	})
+  .option('syncPR', {
+        default: true,
+        describe: 'if true, pull_request synchronize actions are forwarded as well. This is required if pull requests are to be build (and updated) stemming from 3rd party repositories.',
+        type: 'boolean'
+    })
+  .help() // --help
+  .argv;
 
 const inPort = argv.inPort
 const outServer = argv.outServer
 const outPort = argv.outPort
+const syncPR = argv.syncPR
 
 
 var app = express();
@@ -32,7 +50,7 @@ app.use('/', proxy(outServer+":"+outPort,
 			const number = body ? body.number : null;
 			
 			let accept = event== 'push'
-				|| (event == 'pull_request' && action == 'opened');
+				|| (event == 'pull_request' && (action == 'opened' || action=='synchronize'));
 
 			console.log((accept?'Forwarding':
 				                '  Ignoring')
@@ -61,4 +79,4 @@ app.use('/', proxy(outServer+":"+outPort,
 app.use('/', function(req, res, next) { // send ok when event is ignored, otherwise log is floated with errros by smee client
 	res.send('OK');	
 })
-app.listen(inPort, () => console.log(`GitHub Event Filter ${pjson.version} listening on port ${inPort}, forwarding to ${outServer}:${outPort}!`))
+app.listen(inPort, () => console.log(`GitHub Event Filter ${pjson.version} listening on port ${inPort}, forwarding to ${outServer}:${outPort}, syncPR is ${syncPR}!`))
