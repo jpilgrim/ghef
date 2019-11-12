@@ -12,7 +12,7 @@ More information about the context to use ghef: see [Blog entry "Setup Github tr
 
 ## Install
 
-```npm install --global ghef``
+```npm install --global ghef```
 
 ## Usage
 
